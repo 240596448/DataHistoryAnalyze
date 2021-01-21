@@ -38,6 +38,8 @@ FROM (
 			on v._HistoryDataId = l._HistoryDataId
 				and v._MetadataVersionNumber = md._MetadataVersionNumber	
 
+	Where md._IsActual = 0x01
+
 	UNION ALL
 
 	-- закоментировать если таблица _DataHistoryLatestVersions1 отсутсвует
@@ -64,6 +66,8 @@ FROM (
 			on v._HistoryDataId = l._HistoryDataId
 				and v._MetadataVersionNumber = md._MetadataVersionNumber
 				
+	Where md._IsActual = 0x01
+
 	UNION ALL
 
 	-- закоментировать если таблица _DataHistoryLatestVersions2 отсутсвует
@@ -89,6 +93,8 @@ FROM (
 		left join [dbo].[_DataHistoryVersions] as v
 			on v._HistoryDataId = l._HistoryDataId
 				and v._MetadataVersionNumber = md._MetadataVersionNumber
+
+	Where md._IsActual = 0x01
 
 ) as q
 
