@@ -2,16 +2,16 @@
 
 -- Сбор данных
 SELECT
-	q.Type					as Type,
-	q.Name					as Name,
-	q.MetadataId			as MetadataId,
-	q.UserName				as UserName,
-	Count(q.DataId)			as CountDataId,
-	Count(q.VersionNumber)	as CountVer,
-	Max(q.VersionNumber)	as MaxVer,
-	Sum(q.Size)/1024		as SizeKb,
-	Min(q.Date)				as MinDate,
-	Max(q.Date)				as MaxDate
+	q.Type						as Type,
+	q.Name						as Name,
+	q.MetadataId				as MetadataId,
+	q.UserName					as UserName,
+	Count(Distinct q.DataId)	as CountDataId,
+	Count(q.VersionNumber)		as CountVer,
+	Max(q.VersionNumber)		as MaxVer,
+	Sum(q.Size)/1024			as SizeKb,
+	Min(q.Date)					as MinDate,
+	Max(q.Date)					as MaxDate
 INTO #DataHistoryAnalyze
 FROM (
 	SELECT
@@ -22,12 +22,12 @@ FROM (
 		v._UserName				as UserName,
 		v._VersionNumber		as VersionNumber,
 		16 + 9 + 9 + 10 + 5 + 16 
-		+ DATALENGTH(v._UserName)*2
-		+ DATALENGTH(v._UserFullName)*2
-		+ DATALENGTH(v._Comment)*2
-		+ 16 + 1 + 4 + 16
-		+ DATALENGTH(v._Content)
-		as Size,
+			+ DATALENGTH(v._UserName)*2
+			+ DATALENGTH(v._UserFullName)*2
+			+ DATALENGTH(v._Comment)*2
+			+ 16 + 1 + 4 + 16
+			+ DATALENGTH(v._Content)
+								as Size,
 		v._Date					as Date
 	FROM [dbo].[_DataHistoryMetadata] as md
 		left join [dbo].[_DataHistoryMetadataName] as n
@@ -51,11 +51,11 @@ FROM (
 		v._UserName,
 		v._VersionNumber,
 		16 + 9 + 9 + 10 + 5 + 16 
-		+ DATALENGTH(v._UserName)*2
-		+ DATALENGTH(v._UserFullName)*2
-		+ DATALENGTH(v._Comment)*2
-		+ 16 + 1 + 4 + 16
-		+ DATALENGTH(v._Content),
+			+ DATALENGTH(v._UserName)*2
+			+ DATALENGTH(v._UserFullName)*2
+			+ DATALENGTH(v._Comment)*2
+			+ 16 + 1 + 4 + 16
+			+ DATALENGTH(v._Content),
 		v._Date
 	FROM [dbo].[_DataHistoryMetadata] as md 
 		left join [dbo].[_DataHistoryMetadataName] as n
@@ -79,11 +79,11 @@ FROM (
 		v._UserName,
 		v._VersionNumber,
 		16 + 9 + 9 + 10 + 5 + 16 
-		+ DATALENGTH(v._UserName)*2
-		+ DATALENGTH(v._UserFullName)*2
-		+ DATALENGTH(v._Comment)*2
-		+ 16 + 1 + 4 + 16
-		+ DATALENGTH(v._Content),
+			+ DATALENGTH(v._UserName)*2
+			+ DATALENGTH(v._UserFullName)*2
+			+ DATALENGTH(v._Comment)*2
+			+ 16 + 1 + 4 + 16
+			+ DATALENGTH(v._Content),
 		v._Date
 	FROM [dbo].[_DataHistoryMetadata] as md 
 		left join [dbo].[_DataHistoryMetadataName] as n
@@ -123,7 +123,7 @@ SELECT TOP (1000)
 from #DataHistoryAnalyze as q
 
 Group by
-	 q.Type,
+	q.Type,
 	q.Name
 	--,q.UserName
 	
