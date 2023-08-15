@@ -26,4 +26,17 @@ where
 	md._MetadataVersionNumber < e.MetadataMaxVersion
 	and md._IsActual = 0x01
 
+-- изменяем версию метаданных для всех версий объектов
+-- иначе все версии будут привязаны к старой (зависшей) метаверсии
+Update v set v._MetadataVersionNumber = e.MetadataMaxVersion
+	FROM [dbo].[_DataHistoryMetadata] as md
+		inner join ##meta_doubles_error as e
+			on md._MetadataId = e._MetadataId
+		inner join [dbo].[_DataHistoryLatestVersions1] as l
+			on md._MetadataId = l._MetadataId 
+		left join [dbo].[_DataHistoryVersions] as v
+			on v._HistoryDataId = l._HistoryDataId
+				and v._MetadataVersionNumber = md._MetadataVersionNumber
+	Where v._MetadataVersionNumber != e.MetadataMaxVersion
+
 drop table ##meta_doubles_error
