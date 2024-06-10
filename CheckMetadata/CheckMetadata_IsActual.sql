@@ -9,22 +9,20 @@ SELECT
 	md._MetadataVersionNumber	as MetadataVersionNumber,
 	e.MetadataMaxVersion		as MetadataMaxVersion
 FROM [dbo].[_DataHistoryMetadata] as md
-	inner join (
+	INNER JOIN (
 		SELECT
 			md._MetadataId,
 			MAX(md._MetadataVersionNumber) as MetadataMaxVersion
 		FROM [dbo].[_DataHistoryMetadata] as md
-			left join [dbo].[_DataHistoryMetadataName] as n
-				on md._MetadataId = n._MetadataId
-		where md._IsActual = 0x01
-		group by 
-			n.Type,
-			n.Name,
+		WHERE 
+			md._IsActual = 0x01
+		GROUP BY 
 			md._MetadataId
-		having count(md._MetadataVersionNumber) > 1
+		HAVING COUNT(md._MetadataVersionNumber) > 1
 	) as e
-		on md._MetadataId = e._MetadataId
-	left join [dbo].[_DataHistoryMetadataName] as n
-		on md._MetadataId = n._MetadataId
+		ON md._MetadataId = e._MetadataId
+		--and md._Fld2983 = 0   -- имя разделителя
+	LEFT JOIN [dbo].[_DataHistoryMetadataName] as n
+		ON md._MetadataId = n._MetadataId
 
-order by 1,2,3
+ORDER BY 1,2,3
