@@ -32,6 +32,7 @@ FROM (
 	FROM [dbo].[_DataHistoryMetadata] as md
 		left join [dbo].[_DataHistoryMetadataName] as n
 			on md._MetadataId = n._MetadataId
+			--and md._Fld2983 = 0   -- имя разделителя
 		inner join [dbo].[_DataHistoryLatestVersions] as l
 			on md._MetadataId = l._MetadataId 
 		left join [dbo].[_DataHistoryVersions] as v
@@ -60,8 +61,10 @@ FROM (
 	FROM [dbo].[_DataHistoryMetadata] as md 
 		left join [dbo].[_DataHistoryMetadataName] as n
 			on md._MetadataId = n._MetadataId
+			--and md._Fld2983 = 0   -- имя разделителя
 		inner join [dbo].[_DataHistoryLatestVersions1] as l
 			on md._MetadataId = l._MetadataId 
+			--and md._Fld2983 = l._Fld2983
 		left join [dbo].[_DataHistoryVersions] as v
 			on v._HistoryDataId = l._HistoryDataId
 				and v._MetadataVersionNumber = md._MetadataVersionNumber
@@ -89,7 +92,8 @@ FROM (
 		left join [dbo].[_DataHistoryMetadataName] as n
 			on md._MetadataId = n._MetadataId
 		inner join [dbo].[_DataHistoryLatestVersions2] as l
-			on md._MetadataId = l._MetadataId 
+			on md._MetadataId = l._MetadataId
+			--and md._Fld2983 = l._Fld41535
 		left join [dbo].[_DataHistoryVersions] as v
 			on v._HistoryDataId = l._HistoryDataId
 				and v._MetadataVersionNumber = md._MetadataVersionNumber
